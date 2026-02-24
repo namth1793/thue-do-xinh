@@ -4,6 +4,7 @@ import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/data/products';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { api } from '@/lib/api';
 
 export default function Cart() {
   const { items, removeItem, clearCart } = useCart();
@@ -18,15 +19,37 @@ export default function Cart() {
     return sum + item.product.price * days;
   }, 0);
 
-  const handleCheckout = () => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleCheckout = async () => {
     if (!customerName.trim() || !customerPhone.trim()) {
       toast.error('Vui lòng nhập tên và số điện thoại');
       return;
     }
-    // Placeholder - will integrate payment later
-    toast.success('Đặt thuê thành công! Chúng tôi sẽ liên hệ bạn sớm.');
-    clearCart();
-    navigate('/');
+    setSubmitting(true);
+    try {
+      for (const item of items) {
+        const days = Math.max(1, Math.ceil(
+          (new Date(item.returnDate).getTime() - new Date(item.rentalDate).getTime()) / (1000 * 60 * 60 * 24)
+        ));
+        await api.createOrder({
+          productId: item.product.id,
+          productName: item.product.name,
+          customerName: customerName.trim(),
+          customerPhone: customerPhone.trim(),
+          rentalDate: item.rentalDate,
+          returnDate: item.returnDate,
+          totalPrice: item.product.price * days,
+        });
+      }
+      toast.success('Đặt thuê thành công! Chúng tôi sẽ liên hệ bạn sớm.');
+      clearCart();
+      navigate('/');
+    } catch {
+      toast.error('Có lỗi xảy ra, vui lòng thử lại');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (items.length === 0) {
@@ -106,9 +129,10 @@ export default function Cart() {
         </div>
         <button
           onClick={handleCheckout}
-          className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium text-sm hover:opacity-90 transition-opacity"
+          disabled={submitting}
+          className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-60"
         >
-          Đặt thuê ngay
+          {submitting ? 'Đang xử lý...' : 'Đặt thuê ngay'}
         </button>
       </div>
     </main>
