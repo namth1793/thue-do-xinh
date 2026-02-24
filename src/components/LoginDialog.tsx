@@ -76,7 +76,7 @@ export function LoginDialog({ open, onOpenChange, onSuccess }: LoginDialogProps)
             <Input
               id="email"
               type="email"
-              placeholder="admin@thuedo.vn"
+              placeholder="email"
               {...register('email')}
             />
             {errors.email && (
@@ -90,7 +90,7 @@ export function LoginDialog({ open, onOpenChange, onSuccess }: LoginDialogProps)
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
+                placeholder="password"
                 {...register('password')}
               />
               <button
