@@ -1,24 +1,29 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { mockProducts } from '@/data/products';
+import { api, type Product } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
 import ProductFilter from '@/components/ProductFilter';
 
 export default function Products() {
   const [searchParams] = useSearchParams();
+  const [products, setProducts] = useState<Product[]>([]);
   const [category, setCategory] = useState('Tất cả');
   const [condition, setCondition] = useState(
     searchParams.get('condition') === 'new' ? 'Đồ mới' : 'Tất cả'
   );
 
+  useEffect(() => {
+    api.getProducts().then(setProducts).catch(() => {});
+  }, []);
+
   const filtered = useMemo(() => {
-    return mockProducts.filter(p => {
+    return products.filter(p => {
       if (category !== 'Tất cả' && p.category !== category) return false;
       if (condition === 'Đồ mới' && p.condition !== 'new') return false;
       if (condition === 'Đồ cũ' && p.condition !== 'used') return false;
       return true;
     });
-  }, [category, condition]);
+  }, [products, category, condition]);
 
   return (
     <main className="container mx-auto px-4 py-6">

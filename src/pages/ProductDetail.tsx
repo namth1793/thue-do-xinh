@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ShoppingBag } from 'lucide-react';
-import { useState } from 'react';
-import { mockProducts, formatPrice } from '@/data/products';
+import { useState, useEffect } from 'react';
+import { api, type Product } from '@/lib/api';
+import { formatPrice } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 
@@ -9,11 +10,28 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
-  const product = mockProducts.find(p => p.id === id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const today = new Date().toISOString().split('T')[0];
   const [rentalDate, setRentalDate] = useState(today);
   const [returnDate, setReturnDate] = useState('');
+
+  useEffect(() => {
+    if (!id) return;
+    api.getProduct(id)
+      .then(setProduct)
+      .catch(() => setProduct(null))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12 text-center text-muted-foreground">
+        Đang tải...
+      </div>
+    );
+  }
 
   if (!product) {
     return (

@@ -1,12 +1,19 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { mockProducts, formatPrice } from '@/data/products';
-import ProductCard from '@/components/ProductCard';
+import { useState, useEffect } from 'react';
 import heroBanner from '@/assets/hero-banner.jpg';
+import ProductCard from '@/components/ProductCard';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { api, type Product } from '@/lib/api';
 
 const Index = () => {
-  const featured = mockProducts.filter(p => p.status === 'available').slice(0, 4);
-  const newArrivals = mockProducts.filter(p => p.condition === 'new').slice(0, 4);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    api.getProducts().then(setProducts).catch(() => {});
+  }, []);
+
+  const featured = products.filter(p => p.status === 'available').slice(0, 4);
+  const newArrivals = products.filter(p => p.condition === 'new').slice(0, 4);
 
   return (
     <main>

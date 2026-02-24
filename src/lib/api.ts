@@ -55,6 +55,7 @@ export const api = {
 
   // Products (public)
   getProducts: () => request<Product[]>('/products'),
+  getProduct: (id: string) => request<Product>(`/products/${id}`),
 
   // Products (admin)
   createProduct: (data: Omit<Product, 'id'>) =>
