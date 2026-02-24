@@ -102,19 +102,19 @@ export function ProductsTab() {
           </Button>
           <Button size="sm" onClick={openAdd}>
             <Plus className="w-4 h-4 mr-1" />
-            Thêm sản phẩm
+            Thêm
           </Button>
         </div>
       </div>
 
-      <div className="border rounded-md overflow-hidden">
+      <div className="border rounded-md overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Sản phẩm</TableHead>
-              <TableHead>Danh mục</TableHead>
+              <TableHead className="hidden sm:table-cell">Danh mục</TableHead>
               <TableHead>Giá</TableHead>
-              <TableHead>Tình trạng</TableHead>
+              <TableHead className="hidden sm:table-cell">Tình trạng</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
@@ -140,18 +140,18 @@ export function ProductsTab() {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-10 h-10 rounded object-cover shrink-0"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded object-cover shrink-0"
                       />
-                      <span className="font-medium text-sm line-clamp-2">{product.name}</span>
+                      <span className="font-medium text-xs sm:text-sm line-clamp-2 max-w-[100px] sm:max-w-none">{product.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-sm">{product.category}</TableCell>
-                  <TableCell className="text-sm font-medium text-primary">
+                  <TableCell className="hidden sm:table-cell text-sm">{product.category}</TableCell>
+                  <TableCell className="text-xs sm:text-sm font-medium text-primary whitespace-nowrap">
                     {formatPrice(product.price)}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     <Badge variant={product.condition === 'new' ? 'default' : 'secondary'}>
-                      {product.condition === 'new' ? 'Mới' : 'Qua sử dụng'}
+                      {product.condition === 'new' ? 'Mới' : 'Qua SD'}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -160,23 +160,23 @@ export function ProductsTab() {
                       className="cursor-pointer"
                       title="Click để đổi trạng thái"
                     >
-                      <Badge variant={product.status === 'available' ? 'default' : 'destructive'}>
+                      <Badge variant={product.status === 'available' ? 'default' : 'destructive'} className="text-xs whitespace-nowrap">
                         {product.status === 'available' ? 'Có sẵn' : 'Đang thuê'}
                       </Badge>
                     </button>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(product)}>
-                        <Pencil className="w-4 h-4" />
+                      <Button variant="ghost" size="icon" className="h-7 w-7 sm:h-8 sm:w-8" onClick={() => openEdit(product)}>
+                        <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        className="h-7 w-7 sm:h-8 sm:w-8 text-destructive hover:text-destructive"
                         onClick={() => setDeleteId(product.id)}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </TableCell>

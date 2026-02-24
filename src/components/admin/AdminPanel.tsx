@@ -27,9 +27,9 @@ export function AdminPanel({ open, onOpenChange }: AdminPanelProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-2xl p-0 flex flex-col">
+      <SheetContent side="right" className="w-full sm:max-w-2xl overflow-hidden p-0 flex flex-col">
         {/* Header */}
-        <SheetHeader className="px-6 py-4 border-b shrink-0">
+        <SheetHeader className="px-4 sm:px-6 py-4 border-b shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <SheetTitle className="text-left">Quản trị Admin</SheetTitle>
@@ -43,7 +43,7 @@ export function AdminPanel({ open, onOpenChange }: AdminPanelProps) {
         </SheetHeader>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4">
           <Tabs defaultValue="products">
             <TabsList className="mb-4 w-full">
               <TabsTrigger value="products" className="flex-1">

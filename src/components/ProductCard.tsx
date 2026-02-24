@@ -32,11 +32,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
         )}
-        <div className="p-3">
-          <h3 className="text-sm font-medium text-card-foreground line-clamp-2 mb-1">
+        <div className="p-2 sm:p-3">
+          <h3 className="text-xs sm:text-sm font-medium text-card-foreground line-clamp-2 mb-1">
             {product.name}
           </h3>
-          <p className="text-base font-bold text-price">{formatPrice(product.price)}/ngày</p>
+          <p className="text-sm sm:text-base font-bold text-price">{formatPrice(product.price)}/ngày</p>
         </div>
       </div>
     </Link>

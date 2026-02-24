@@ -110,14 +110,14 @@ export default function Cart() {
           placeholder="Họ và tên"
           value={customerName}
           onChange={e => setCustomerName(e.target.value)}
-          className="w-full px-3 py-2.5 text-sm rounded-lg border bg-card text-foreground placeholder:text-muted-foreground"
+          className="w-full px-3 py-3 text-sm rounded-lg border bg-card text-foreground placeholder:text-muted-foreground"
         />
         <input
           type="tel"
           placeholder="Số điện thoại"
           value={customerPhone}
           onChange={e => setCustomerPhone(e.target.value)}
-          className="w-full px-3 py-2.5 text-sm rounded-lg border bg-card text-foreground placeholder:text-muted-foreground"
+          className="w-full px-3 py-3 text-sm rounded-lg border bg-card text-foreground placeholder:text-muted-foreground"
         />
       </div>
 
@@ -130,7 +130,7 @@ export default function Cart() {
         <button
           onClick={handleCheckout}
           disabled={submitting}
-          className="w-full bg-primary text-primary-foreground py-3 rounded-full font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-60"
+          className="w-full bg-primary text-primary-foreground py-3.5 rounded-full font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-60"
         >
           {submitting ? 'Đang xử lý...' : 'Đặt thuê ngay'}
         </button>

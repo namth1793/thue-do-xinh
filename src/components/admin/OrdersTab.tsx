@@ -138,12 +138,12 @@ export function OrdersTab() {
         </div>
       </div>
 
-      <div className="border rounded-md overflow-hidden">
+      <div className="border rounded-md overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Sản phẩm / Khách</TableHead>
-              <TableHead>Ngày thuê</TableHead>
+              <TableHead className="hidden sm:table-cell">Ngày thuê</TableHead>
               <TableHead>Giá</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Xóa</TableHead>
@@ -161,7 +161,7 @@ export function OrdersTab() {
             ) : orders.map(order => (
               <TableRow key={order.id}>
                 <TableCell>
-                  <p className="font-medium text-sm line-clamp-1">{order.productName}</p>
+                  <p className="font-medium text-xs sm:text-sm line-clamp-1 max-w-[110px] sm:max-w-none">{order.productName}</p>
                   <p className="text-xs text-muted-foreground">{order.customerName}</p>
                   {order.customerPhone && (
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -169,11 +169,11 @@ export function OrdersTab() {
                     </p>
                   )}
                 </TableCell>
-                <TableCell className="text-xs">
+                <TableCell className="hidden sm:table-cell text-xs">
                   <p>{order.rentalDate}</p>
                   <p className="text-muted-foreground">→ {order.returnDate}</p>
                 </TableCell>
-                <TableCell className="text-sm font-medium text-primary">
+                <TableCell className="text-xs sm:text-sm font-medium text-primary whitespace-nowrap">
                   {formatPrice(order.totalPrice)}
                 </TableCell>
                 <TableCell>
@@ -181,7 +181,7 @@ export function OrdersTab() {
                     value={order.status}
                     onValueChange={val => handleStatusChange(order, val as Order['status'])}
                   >
-                    <SelectTrigger className="h-8 w-36 text-xs border-0 p-0 shadow-none">
+                    <SelectTrigger className="h-8 w-28 sm:w-36 text-xs border-0 p-0 shadow-none">
                       <Badge variant={STATUS_CONFIG[order.status].variant} className="text-xs cursor-pointer">
                         {STATUS_CONFIG[order.status].label}
                       </Badge>
@@ -194,9 +194,9 @@ export function OrdersTab() {
                   </Select>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"
+                  <Button variant="ghost" size="icon" className="h-7 w-7 sm:h-8 sm:w-8 text-destructive hover:text-destructive"
                     onClick={() => setDeleteId(order.id)}>
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -207,7 +207,7 @@ export function OrdersTab() {
 
       {/* Add order dialog */}
       <Dialog open={addOpen} onOpenChange={open => { setAddOpen(open); if (!open) setForm(EMPTY_FORM); }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Thêm đơn hàng mới</DialogTitle>
           </DialogHeader>
