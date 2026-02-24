@@ -19,7 +19,7 @@ const Index = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/30 to-transparent" />
         <div className="relative h-full container mx-auto px-4 flex flex-col justify-end pb-10">
-          <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-3 max-w-lg">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-3 max-w-lg">
             Thuê đồ đẹp, giá hợp lý
           </h1>
           <p className="text-primary-foreground/80 text-base md:text-lg mb-5 max-w-md">
