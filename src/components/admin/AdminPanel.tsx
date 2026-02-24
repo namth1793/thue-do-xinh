@@ -1,4 +1,4 @@
-import { LogOut, Package, BarChart2 } from 'lucide-react';
+import { LogOut, Package, BarChart2, ClipboardList } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProductsTab } from './ProductsTab';
 import { RevenueTab } from './RevenueTab';
+import { OrdersTab } from './OrdersTab';
 
 interface AdminPanelProps {
   open: boolean;
@@ -49,6 +50,10 @@ export function AdminPanel({ open, onOpenChange }: AdminPanelProps) {
                 <Package className="w-4 h-4 mr-1.5" />
                 Sản phẩm
               </TabsTrigger>
+              <TabsTrigger value="orders" className="flex-1">
+                <ClipboardList className="w-4 h-4 mr-1.5" />
+                Đơn hàng
+              </TabsTrigger>
               <TabsTrigger value="revenue" className="flex-1">
                 <BarChart2 className="w-4 h-4 mr-1.5" />
                 Doanh thu
@@ -57,6 +62,10 @@ export function AdminPanel({ open, onOpenChange }: AdminPanelProps) {
 
             <TabsContent value="products">
               <ProductsTab />
+            </TabsContent>
+
+            <TabsContent value="orders">
+              <OrdersTab />
             </TabsContent>
 
             <TabsContent value="revenue">

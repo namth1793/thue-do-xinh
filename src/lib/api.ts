@@ -36,6 +36,23 @@ export const api = {
       { method: 'POST', body: JSON.stringify({ email, password }) }
     ),
 
+  // Upload image
+  uploadImage: async (file: File): Promise<{ url: string }> => {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await fetch(`${BASE_URL}/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Upload thất bại' }));
+      throw new Error(err.message);
+    }
+    return res.json();
+  },
+
   // Products (public)
   getProducts: () => request<Product[]>('/products'),
 
@@ -54,6 +71,18 @@ export const api = {
 
   // Revenue (admin)
   getRevenue: () => request<RevenueData>('/revenue'),
+
+  // Orders (admin)
+  getOrders: () => request<Order[]>('/orders'),
+
+  createOrder: (data: Omit<Order, 'id' | 'status' | 'createdAt'>) =>
+    request<Order>('/orders', { method: 'POST', body: JSON.stringify(data) }),
+
+  updateOrderStatus: (id: string, status: Order['status']) =>
+    request<Order>(`/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+
+  deleteOrder: (id: string) =>
+    request<{ message: string }>(`/orders/${id}`, { method: 'DELETE' }),
 };
 
 export interface Product {
@@ -65,6 +94,19 @@ export interface Product {
   condition: 'new' | 'used';
   image: string;
   status: 'available' | 'rented';
+}
+
+export interface Order {
+  id: string;
+  productId: string;
+  productName: string;
+  customerName: string;
+  customerPhone: string;
+  rentalDate: string;
+  returnDate: string;
+  totalPrice: number;
+  status: 'pending' | 'confirmed' | 'renting' | 'completed' | 'cancelled';
+  createdAt: string;
 }
 
 export interface RevenueData {
