@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
-import heroBanner from '@/assets/hero-banner.jpg';
 import ProductCard from '@/components/ProductCard';
 import { ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, type Product, type SiteSettings, type NewsPost } from '@/lib/api';
 
+const DEFAULT_SETTINGS: SiteSettings = {
+  heroImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1600&h=900&fit=crop',
+  heroTitle: 'Khám phá Mộc Châu trên những chiếc Triumph',
+  heroSubtitle: 'Thuê xe máy chất lượng cao, trải nghiệm cung đường đẹp nhất tại Mộc Châu. Đặt xe ngay hôm nay!',
+};
+
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [news, setNews] = useState<NewsPost[]>([]);
 
   useEffect(() => {
@@ -18,9 +23,9 @@ const Index = () => {
 
   const featured = products.filter(p => p.status === 'available').slice(0, 4);
 
-  const heroImage = settings?.heroImage || heroBanner;
-  const heroTitle = settings?.heroTitle || 'Khám phá Mộc Châu trên những chiếc Triumph';
-  const heroSubtitle = settings?.heroSubtitle || 'Thuê xe máy chất lượng cao, trải nghiệm cung đường đẹp nhất tại Mộc Châu.';
+  const heroImage = settings.heroImage || DEFAULT_SETTINGS.heroImage;
+  const heroTitle = settings.heroTitle || DEFAULT_SETTINGS.heroTitle;
+  const heroSubtitle = settings.heroSubtitle || DEFAULT_SETTINGS.heroSubtitle;
 
   return (
     <main>
