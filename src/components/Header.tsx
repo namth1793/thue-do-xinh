@@ -20,13 +20,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-card shadow-sm">
-      {/* Announcement bar */}
-      <div className="bg-primary text-primary-foreground text-xs text-center py-1.5 px-4 font-medium tracking-wide">
-        📞 Đặt xe vui lòng gọi : 0931.6868.97
-      </div>
-
       {/* Main header */}
-      <div className="border-b bg-card/95 backdrop-blur-md">
+      <div className="bg-card/95 backdrop-blur-md">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0">
@@ -34,9 +29,9 @@ export default function Header() {
           </Link>
 
           {/* Site name — center */}
-          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center leading-tight pointer-events-none select-none">
-            <span className="text-base font-bold text-primary tracking-wide">Phan Hoa Motorbike Rental</span>
-            <span className="text-sm font-medium text-muted-foreground">Mộc Châu</span>
+          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center leading-none pointer-events-none select-none">
+            <span className="text-lg font-extrabold text-foreground tracking-widest uppercase">CHO THUÊ XE MÁY</span>
+            <span className="text-xs font-medium text-primary tracking-wide mt-0.5">Phan Hoa Motorbike Rental Mộc Châu</span>
           </div>
 
           {/* Desktop nav */}
@@ -98,7 +93,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-card border-b animate-in slide-in-from-top-2">
+        <div className="md:hidden bg-card animate-in slide-in-from-top-2">
           <nav className="container mx-auto px-4 py-3 flex flex-col gap-2">
             {links.map(link => (
               <Link
@@ -115,6 +110,11 @@ export default function Header() {
           </nav>
         </div>
       )}
+
+      {/* Announcement bar — bottom of header */}
+      <div className="bg-primary text-primary-foreground text-xs text-center py-1.5 px-4 font-medium tracking-wide">
+        📞 Đặt xe vui lòng gọi : 0931.6868.97
+      </div>
     </header>
   );
 }
