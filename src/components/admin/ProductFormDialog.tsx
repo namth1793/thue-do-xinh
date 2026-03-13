@@ -16,15 +16,14 @@ import {
 import { api, type Product } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 
-const CATEGORIES = ['Váy dạ hội', 'Áo dài', 'Vest nam', 'Đồ cưới', 'Đồ cosplay', 'Đồ công sở'];
-const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=500&fit=crop';
+const CATEGORIES = ['Xe côn', 'Xe ga', 'Xe số', 'Xe cao cấp'];
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&h=400&fit=crop';
 
 const productSchema = z.object({
   name: z.string().min(2, 'Tên tối thiểu 2 ký tự'),
   price: z.coerce.number().min(1000, 'Giá tối thiểu 1.000đ'),
   description: z.string().optional(),
   category: z.string().min(1, 'Chọn danh mục'),
-  condition: z.enum(['new', 'used']),
   status: z.enum(['available', 'rented']),
 });
 
@@ -47,18 +46,18 @@ export function ProductFormDialog({ open, onOpenChange, product, onSubmit }: Pro
   const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } =
     useForm<ProductForm>({
       resolver: zodResolver(productSchema),
-      defaultValues: { condition: 'new', status: 'available' },
+      defaultValues: { status: 'available' },
     });
 
   useEffect(() => {
     if (product) {
       reset({
         name: product.name, price: product.price, description: product.description,
-        category: product.category, condition: product.condition, status: product.status,
+        category: product.category, status: product.status,
       });
       setImageUrl(product.image || '');
     } else {
-      reset({ condition: 'new', status: 'available' });
+      reset({ status: 'available' });
       setImageUrl('');
     }
   }, [product, reset, open]);
@@ -84,7 +83,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSubmit }: Pro
       price: data.price,
       description: data.description || '',
       category: data.category,
-      condition: data.condition,
+      condition: 'new',
       status: data.status,
       image: imageUrl || DEFAULT_IMAGE,
     });
@@ -95,15 +94,14 @@ export function ProductFormDialog({ open, onOpenChange, product, onSubmit }: Pro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'}</DialogTitle>
+          <DialogTitle>{isEditing ? 'Sửa xe' : 'Thêm xe mới'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-
           {/* Image upload */}
           <div className="space-y-1.5">
             <Label>Hình ảnh</Label>
             <div className="flex gap-3 items-start">
-              <div className="relative w-24 h-28 shrink-0 rounded-md overflow-hidden border bg-muted">
+              <div className="relative w-32 h-24 shrink-0 rounded-md overflow-hidden border bg-muted">
                 {imageUrl ? (
                   <>
                     <img src={imageUrl} alt="preview" className="w-full h-full object-cover" />
@@ -134,14 +132,14 @@ export function ProductFormDialog({ open, onOpenChange, product, onSubmit }: Pro
           </div>
 
           <div className="space-y-1.5">
-            <Label>Tên sản phẩm *</Label>
-            <Input placeholder="Váy dạ hội đỏ..." {...register('name')} />
+            <Label>Tên xe *</Label>
+            <Input placeholder="Triumph Tiger 900..." {...register('name')} />
             {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Giá thuê (đ) *</Label>
+              <Label>Giá thuê (đ/ngày) *</Label>
               <Input type="number" placeholder="350000" {...register('price')} />
               {errors.price && <p className="text-xs text-destructive">{errors.price.message}</p>}
             </div>
@@ -157,38 +155,26 @@ export function ProductFormDialog({ open, onOpenChange, product, onSubmit }: Pro
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Tình trạng</Label>
-              <Select value={watch('condition')} onValueChange={val => setValue('condition', val as 'new' | 'used')}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="new">Mới</SelectItem>
-                  <SelectItem value="used">Đã qua sử dụng</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label>Trạng thái</Label>
-              <Select value={watch('status')} onValueChange={val => setValue('status', val as 'available' | 'rented')}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="available">Có sẵn</SelectItem>
-                  <SelectItem value="rented">Đang cho thuê</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-1.5">
+            <Label>Tình trạng</Label>
+            <Select value={watch('status')} onValueChange={val => setValue('status', val as 'available' | 'rented')}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="available">Có sẵn</SelectItem>
+                <SelectItem value="rented">Không có sẵn</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-1.5">
             <Label>Mô tả</Label>
-            <Textarea placeholder="Mô tả chi tiết sản phẩm..." rows={3} {...register('description')} />
+            <Textarea placeholder="Mô tả chi tiết về xe..." rows={3} {...register('description')} />
           </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Hủy</Button>
             <Button type="submit" disabled={isSubmitting || uploading}>
-              {isSubmitting ? 'Đang lưu...' : isEditing ? 'Lưu thay đổi' : 'Thêm sản phẩm'}
+              {isSubmitting ? 'Đang lưu...' : isEditing ? 'Lưu thay đổi' : 'Thêm xe'}
             </Button>
           </DialogFooter>
         </form>

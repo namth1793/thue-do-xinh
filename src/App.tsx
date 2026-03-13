@@ -12,6 +12,9 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
+import AdminPage from "./pages/AdminPage";
+import NewsPage from "./pages/NewsPage";
+import NewsDetail from "./pages/NewsDetail";
 
 const queryClient = new QueryClient();
 
@@ -24,13 +27,22 @@ const App = () => (
           <Sonner />
           <SocialFloat />
           <BrowserRouter>
-            <Header />
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="*" element={
+                <>
+                  <Header />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/news" element={<NewsPage />} />
+                    <Route path="/news/:id" element={<NewsDetail />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </>
+              } />
             </Routes>
           </BrowserRouter>
         </CartProvider>

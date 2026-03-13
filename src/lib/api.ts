@@ -13,18 +13,12 @@ async function request<T>(
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
-
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: 'Lỗi kết nối server' }));
     throw new Error(error.message || 'Có lỗi xảy ra');
   }
-
   return res.json();
 }
 
@@ -60,13 +54,10 @@ export const api = {
   // Products (admin)
   createProduct: (data: Omit<Product, 'id'>) =>
     request<Product>('/products', { method: 'POST', body: JSON.stringify(data) }),
-
   updateProduct: (id: string, data: Partial<Product>) =>
     request<Product>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-
   updateProductStatus: (id: string, status: 'available' | 'rented') =>
     request<Product>(`/products/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
-
   deleteProduct: (id: string) =>
     request<{ message: string }>(`/products/${id}`, { method: 'DELETE' }),
 
@@ -75,15 +66,27 @@ export const api = {
 
   // Orders (admin)
   getOrders: () => request<Order[]>('/orders'),
-
   createOrder: (data: Omit<Order, 'id' | 'status' | 'createdAt'>) =>
     request<Order>('/orders', { method: 'POST', body: JSON.stringify(data) }),
-
   updateOrderStatus: (id: string, status: Order['status']) =>
     request<Order>(`/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
-
   deleteOrder: (id: string) =>
     request<{ message: string }>(`/orders/${id}`, { method: 'DELETE' }),
+
+  // Settings
+  getSettings: () => request<SiteSettings>('/settings'),
+  updateSettings: (data: Partial<SiteSettings>) =>
+    request<SiteSettings>('/settings', { method: 'PUT', body: JSON.stringify(data) }),
+
+  // News
+  getNews: () => request<NewsPost[]>('/news'),
+  getNewsPost: (id: string) => request<NewsPost>(`/news/${id}`),
+  createNews: (data: Omit<NewsPost, 'id' | 'createdAt'>) =>
+    request<NewsPost>('/news', { method: 'POST', body: JSON.stringify(data) }),
+  updateNews: (id: string, data: Partial<NewsPost>) =>
+    request<NewsPost>(`/news/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteNews: (id: string) =>
+    request<{ message: string }>(`/news/${id}`, { method: 'DELETE' }),
 };
 
 export interface Product {
@@ -126,4 +129,20 @@ export interface RevenueData {
     totalPrice: number;
     createdAt: string;
   }[];
+}
+
+export interface SiteSettings {
+  heroImage: string;
+  heroTitle: string;
+  heroSubtitle: string;
+}
+
+export interface NewsPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  updatedAt?: string;
 }

@@ -1,52 +1,59 @@
 import { useState, useEffect } from 'react';
 import heroBanner from '@/assets/hero-banner.jpg';
 import ProductCard from '@/components/ProductCard';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { api, type Product } from '@/lib/api';
+import { api, type Product, type SiteSettings, type NewsPost } from '@/lib/api';
 
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [news, setNews] = useState<NewsPost[]>([]);
 
   useEffect(() => {
     api.getProducts().then(setProducts).catch(() => {});
+    api.getSettings().then(setSettings).catch(() => {});
+    api.getNews().then(n => setNews(n.slice(0, 3))).catch(() => {});
   }, []);
 
   const featured = products.filter(p => p.status === 'available').slice(0, 4);
-  const newArrivals = products.filter(p => p.condition === 'new').slice(0, 4);
+
+  const heroImage = settings?.heroImage || heroBanner;
+  const heroTitle = settings?.heroTitle || 'Khám phá Mộc Châu trên những chiếc Triumph';
+  const heroSubtitle = settings?.heroSubtitle || 'Thuê xe máy chất lượng cao, trải nghiệm cung đường đẹp nhất tại Mộc Châu.';
 
   return (
     <main>
       {/* Hero */}
-      <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
+      <section className="relative h-[65vh] min-h-[420px] overflow-hidden">
         <img
-          src={heroBanner}
-          alt="Bộ sưu tập cho thuê"
+          src={heroImage}
+          alt="Phan Hoa Motorbike Rental"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/30 to-transparent" />
-        <div className="relative h-full container mx-auto px-4 flex flex-col justify-end pb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-3 max-w-lg">
-            Thuê đồ đẹp, giá hợp lý
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+        <div className="relative h-full container mx-auto px-4 flex flex-col justify-end pb-12">
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 max-w-2xl leading-tight">
+            {heroTitle}
           </h1>
-          <p className="text-primary-foreground/80 text-base md:text-lg mb-5 max-w-md">
-            Đa dạng quần áo thời trang cho mọi dịp. Thuê dễ dàng, trả tiện lợi.
+          <p className="text-white/85 text-base md:text-lg mb-6 max-w-lg">
+            {heroSubtitle}
           </p>
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium text-sm w-fit hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-full font-semibold text-sm w-fit hover:opacity-90 transition-opacity shadow-lg"
           >
-            Xem sản phẩm
+            Xem xe ngay
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
 
-      {/* Featured */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-foreground">Nổi bật</h2>
-          <Link to="/products" className="text-sm text-primary font-medium flex items-center gap-1">
+      {/* Featured bikes */}
+      <section className="container mx-auto px-4 py-10">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xl font-bold text-foreground">Xe nổi bật</h2>
+          <Link to="/products" className="text-sm text-primary font-medium flex items-center gap-1 hover:underline">
             Xem tất cả <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -55,28 +62,50 @@ const Index = () => {
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+        {featured.length === 0 && (
+          <p className="text-center text-muted-foreground py-8">Chưa có xe nào.</p>
+        )}
       </section>
 
-      {/* New Arrivals */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-foreground">Đồ mới về</h2>
-          <Link to="/products?condition=new" className="text-sm text-primary font-medium flex items-center gap-1">
-            Xem tất cả <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          {newArrivals.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+      {/* News preview */}
+      {news.length > 0 && (
+        <section className="bg-secondary/30 py-10">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <Newspaper className="h-5 w-5 text-primary" />
+                Tin tức mới nhất
+              </h2>
+              <Link to="/news" className="text-sm text-primary font-medium flex items-center gap-1 hover:underline">
+                Xem tất cả <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {news.map(post => (
+                <Link key={post.id} to={`/news/${post.id}`} className="group bg-card rounded-lg border overflow-hidden hover:border-primary/50 transition-colors">
+                  {post.image && (
+                    <div className="aspect-video overflow-hidden">
+                      <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <p className="text-xs text-muted-foreground mb-1">{post.createdAt}</p>
+                    <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-primary transition-colors">{post.title}</h3>
+                    {post.excerpt && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{post.excerpt}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="bg-card border-t mt-8">
         <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
-          <p>© 2026 Thuê Đồ Đẹp. Mọi quyền được bảo lưu.</p>
-          <p className="mt-1">Liên hệ: 0123 456 789 | info@thuedodep.vn</p>
+          <p className="font-semibold text-foreground mb-1">Phan Hoa Motorbike Rental Mộc Châu</p>
+          <p>© 2026 Phan Hoa Motorbike Rental. Mọi quyền được bảo lưu.</p>
+          <p className="mt-1">📞 0931.6868.97 · Mộc Châu, Sơn La</p>
         </div>
       </footer>
     </main>

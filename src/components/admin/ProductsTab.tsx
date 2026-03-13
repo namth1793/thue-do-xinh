@@ -85,7 +85,7 @@ export function ProductsTab() {
     const newStatus = product.status === 'available' ? 'rented' : 'available';
     try {
       await api.updateProductStatus(product.id, newStatus);
-      toast({ title: `Đã chuyển sang "${newStatus === 'available' ? 'Có sẵn' : 'Đang cho thuê'}"` });
+      toast({ title: `Đã chuyển sang "${newStatus === 'available' ? 'Có sẵn' : 'Không có sẵn'}"` });
       fetchProducts();
     } catch {
       toast({ title: 'Lỗi', description: 'Không đổi được trạng thái', variant: 'destructive' });
@@ -114,7 +114,6 @@ export function ProductsTab() {
               <TableHead>Sản phẩm</TableHead>
               <TableHead className="hidden sm:table-cell">Danh mục</TableHead>
               <TableHead>Giá</TableHead>
-              <TableHead className="hidden sm:table-cell">Tình trạng</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
@@ -149,11 +148,6 @@ export function ProductsTab() {
                   <TableCell className="text-xs sm:text-sm font-medium text-primary whitespace-nowrap">
                     {formatPrice(product.price)}
                   </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge variant={product.condition === 'new' ? 'default' : 'secondary'}>
-                      {product.condition === 'new' ? 'Mới' : 'Qua SD'}
-                    </Badge>
-                  </TableCell>
                   <TableCell>
                     <button
                       onClick={() => toggleStatus(product)}
@@ -161,7 +155,7 @@ export function ProductsTab() {
                       title="Click để đổi trạng thái"
                     >
                       <Badge variant={product.status === 'available' ? 'default' : 'destructive'} className="text-xs whitespace-nowrap">
-                        {product.status === 'available' ? 'Có sẵn' : 'Đang thuê'}
+                        {product.status === 'available' ? 'Có sẵn' : 'Không có sẵn'}
                       </Badge>
                     </button>
                   </TableCell>
