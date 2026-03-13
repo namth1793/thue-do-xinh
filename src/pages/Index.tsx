@@ -38,9 +38,6 @@ const Index = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
         <div className="relative h-full container mx-auto px-4 flex flex-col justify-end pb-12">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 max-w-2xl leading-tight">
-            {heroTitle}
-          </h1>
           <p className="text-white/85 text-base md:text-lg mb-6 max-w-lg">
             {heroSubtitle}
           </p>
