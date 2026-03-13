@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, Menu, X, Lock, ShieldCheck } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,10 +31,17 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-primary">
-            Thuê Đồ Đẹp
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 shrink-0">
+            <img src={logo} alt="Phan Hoa Motorbike Rental" className="h-14 w-auto object-contain" />
           </Link>
+
+          {/* Site name — center */}
+          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center leading-tight pointer-events-none select-none">
+            <span className="text-base font-bold text-primary tracking-wide">Phan Hoa Motorbike Rental</span>
+            <span className="text-sm font-medium text-muted-foreground">Mộc Châu</span>
+          </div>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">

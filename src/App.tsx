@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
+import SocialFloat from "@/components/SocialFloat";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -21,6 +22,7 @@ const App = () => (
         <CartProvider>
           <Toaster />
           <Sonner />
+          <SocialFloat />
           <BrowserRouter>
             <Header />
             <Routes>
